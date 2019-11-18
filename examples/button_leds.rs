@@ -1,7 +1,7 @@
 #![no_std]
 
 use futures::future;
-use libtock::buttons::ButtonState;
+use libtock::buttons_new::ObservableButton;
 use libtock::result::TockResult;
 
 #[libtock::main]
@@ -11,16 +11,32 @@ async fn main() -> TockResult<()> {
     let buttons_driver = drivers.buttons.init_driver()?;
     let leds_driver = drivers.leds.init_driver()?;
 
-    let mut callback = |button_num, state| {
-        if let (ButtonState::Pressed, Ok(led)) = (state, leds_driver.get(button_num)) {
-            led.toggle().ok().unwrap();
-        }
-    };
+    future::try_join3(
+        future::try_join3(
+            toggle_led_on_button_press(&button_0, 0),
+            toggle_led_on_button_press(&button_0, 2),
+            toggle_led_on_button_press(&button_1, 1),
+        ),
+        future::try_join3(
+            toggle_led_on_button_press(&button_1, 3),
+            toggle_led_on_button_press(&button_2, 0),
+            toggle_led_on_button_press(&button_2, 1),
+        ),
+        //future::try_join(
+        toggle_led_on_button_press(&button_3, 2),
+        //toggle_led_on_button_press(&button_3, 3),
+        //),
+    )
+    .await?;
+    Ok(())
+}
 
-    let _subscription = buttons_driver.subscribe(&mut callback)?;
-    for button in buttons_driver.buttons() {
-        button.enable_interrupt()?;
+async fn toggle_led_on_button_press(
+    button: &ObservableButton<'_>,
+    led_num: usize,
+) -> TockResult<()> {
+    loop {
+        button.wait_for_pressed_event().await;
+        led::get(led_num).unwrap().toggle()?;
     }
-
-    future::pending().await
 }

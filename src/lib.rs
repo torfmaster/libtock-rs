@@ -9,6 +9,7 @@ pub mod adc;
 pub mod ble_composer;
 pub mod ble_parser;
 pub mod buttons;
+pub mod buttons_new;
 pub mod callback;
 pub mod console;
 pub mod debug;
