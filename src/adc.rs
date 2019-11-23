@@ -64,7 +64,8 @@ where
     pub fn init(&mut self) -> TockResult<Adc> {
         let adc = Adc {
             count: syscalls::command(DRIVER_NUM, command::COUNT, 0, 0)?,
-            subscription: syscalls::subscribe(DRIVER_NUM, subscribe::SUBSCRIBE_CALLBACK, self)?,
+            subscription: syscalls::subscribe(DRIVER_NUM, subscribe::SUBSCRIBE_CALLBACK, self)?
+                .unpeek(),
         };
         Ok(adc)
     }

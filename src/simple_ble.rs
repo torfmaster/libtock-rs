@@ -97,6 +97,6 @@ impl BleDriver {
         let subscription =
             syscalls::subscribe(DRIVER_NUMBER, ble_commands::BLE_PASSIVE_SCAN_SUB, callback)?;
         syscalls::command(DRIVER_NUMBER, ble_commands::PASSIVE_SCAN, 1, 0)?;
-        Ok(subscription)
+        Ok(subscription.unpeek())
     }
 }

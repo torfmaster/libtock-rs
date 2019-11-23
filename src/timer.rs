@@ -77,7 +77,7 @@ where
         };
 
         let subscription =
-            syscalls::subscribe(DRIVER_NUMBER, subscribe_nr::SUBSCRIBE_CALLBACK, self)?;
+            syscalls::subscribe(DRIVER_NUMBER, subscribe_nr::SUBSCRIBE_CALLBACK, self)?.unpeek();
 
         Ok(Timer {
             num_notifications,

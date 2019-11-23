@@ -19,13 +19,30 @@ pub struct CallbackSubscription<'a> {
     _lifetime: PhantomData<&'a ()>,
 }
 
-impl<'a> CallbackSubscription<'a> {
-    pub fn new(driver_number: usize, subscribe_number: usize) -> CallbackSubscription<'a> {
-        CallbackSubscription {
-            driver_number,
-            subscribe_number,
-            _lifetime: Default::default(),
+#[must_use = "Subscriptions risk being dropped too early. Drop them manually."]
+pub struct PeekableCallbackSubscription<'a, CB> {
+    subscription: CallbackSubscription<'a>,
+    callback: &'a mut CB,
+}
+
+impl<'a, CB> PeekableCallbackSubscription<'a, CB> {
+    pub fn new(driver_number: usize, subscribe_number: usize, callback: &'a mut CB) -> Self {
+        PeekableCallbackSubscription {
+            subscription: CallbackSubscription {
+                driver_number,
+                subscribe_number,
+                _lifetime: Default::default(),
+            },
+            callback,
         }
+    }
+
+    pub fn peek<T, F: FnOnce(&mut CB) -> T>(&mut self, peek_fn: F) -> T {
+        peek_fn(self.callback)
+    }
+
+    pub fn unpeek(self) -> CallbackSubscription<'a> {
+        self.subscription
     }
 }
 

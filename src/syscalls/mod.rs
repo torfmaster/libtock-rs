@@ -6,7 +6,7 @@
 )]
 mod platform;
 
-use crate::callback::CallbackSubscription;
+use crate::callback::PeekableCallbackSubscription;
 use crate::callback::SubscribableCallback;
 use crate::result::AllowError;
 use crate::result::CommandError;
@@ -35,7 +35,7 @@ pub fn subscribe<CB: SubscribableCallback>(
     driver_number: usize,
     subscribe_number: usize,
     callback: &mut CB,
-) -> Result<CallbackSubscription, SubscribeError> {
+) -> Result<PeekableCallbackSubscription<CB>, SubscribeError> {
     extern "C" fn c_callback<CB: SubscribableCallback>(
         arg1: usize,
         arg2: usize,
@@ -52,7 +52,7 @@ pub fn subscribe<CB: SubscribableCallback>(
         c_callback::<CB>,
         callback as *mut CB as usize,
     )
-    .map(|_| CallbackSubscription::new(driver_number, subscribe_number))
+    .map(move |_| PeekableCallbackSubscription::new(driver_number, subscribe_number, callback))
 }
 
 pub fn subscribe_fn(

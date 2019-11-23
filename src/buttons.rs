@@ -42,7 +42,8 @@ where
                 DRIVER_NUMBER,
                 subscribe_nr::SUBSCRIBE_CALLBACK,
                 self,
-            )?,
+            )?
+            .unpeek(),
         };
         Ok(buttons)
     }
