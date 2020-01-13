@@ -20,5 +20,6 @@ pub mod temperature;
 pub mod timer;
 
 pub use drivers::retrieve_drivers;
+// TODO: One platform-specific module and one lang_items module only
 pub use libtock_codegen::main;
 pub use libtock_core::*;
