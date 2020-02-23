@@ -10,6 +10,10 @@ pub unsafe fn yieldk() {
     EVENTS.with(|e| e.borrow_mut().push(Event::YieldK));
 }
 
+pub unsafe fn notify_panic() {
+    unimplemented!();
+}
+
 /// Subscribe a callback to the kernel
 /// # Safety
 /// Unsafe as passed callback is dereferenced and called.

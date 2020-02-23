@@ -61,6 +61,8 @@ unsafe fn report_panic() -> ! {
     // Signal a panic using the LowLevelDebug capsule (if available).
     super::debug::low_level_status_code(1);
 
+    crate::syscalls::notify_panic();
+
     // Flash all LEDs (if available).
     executor::block_on(async {
         let mut drivers = drivers::retrieve_drivers_unsafe();

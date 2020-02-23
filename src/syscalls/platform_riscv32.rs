@@ -87,3 +87,17 @@ pub unsafe fn memop(major: u32, arg1: usize) -> isize {
          : "volatile");
     res
 }
+
+#[inline(always)]
+// Justification: documentation is generated from mocks
+#[allow(clippy::missing_safety_doc)]
+pub unsafe fn notify_panic() {
+    asm! (
+        "li    a0, 5
+        ecall"
+        :
+        :
+        : "memory", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17",
+        "x5", "x6", "x7", "x28", "x29", "x30", "x31", "x1"
+        : "volatile");
+}

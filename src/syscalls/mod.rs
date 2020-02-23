@@ -160,3 +160,9 @@ pub fn allow(
         })
     }
 }
+
+pub(crate) fn notify_panic() {
+    unsafe {
+        raw::notify_panic();
+    }
+}
