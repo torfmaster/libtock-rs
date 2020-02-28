@@ -1,7 +1,6 @@
 #![no_std]
 
 use core::cell::Cell;
-use core::fmt::Write;
 use libtock::buttons::ButtonState;
 use libtock::result::TockResult;
 use libtock::timer::Duration;
@@ -35,7 +34,8 @@ async fn main() -> TockResult<()> {
             "pressed: {}, released: {}",
             pressed_count.get(),
             released_count.get()
-        )?;
+        )
+        .await?;
         timer_driver.sleep(Duration::from_ms(500)).await?;
     }
 }

@@ -4,7 +4,7 @@ use crate::futures;
 use crate::result::TockResult;
 use crate::syscalls;
 use core::cell::Cell;
-use core::fmt;
+use core::fmt::Arguments;
 use core::mem;
 
 const DRIVER_NUMBER: usize = 1;
@@ -73,10 +73,8 @@ impl Console {
 
         Ok(())
     }
-}
 
-impl fmt::Write for Console {
-    fn write_str(&mut self, string: &str) -> Result<(), fmt::Error> {
-        self.write(string).map_err(|_| fmt::Error)
+    pub async fn write_fmt(&mut self, _args: Arguments<'_>) -> TockResult<()> {
+        Ok(())
     }
 }

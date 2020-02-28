@@ -1,6 +1,5 @@
 #![no_std]
 
-use core::fmt::Write;
 use libtock::gpio::ResistorMode;
 use libtock::result::TockResult;
 use libtock::timer::Duration;
@@ -18,7 +17,7 @@ async fn main() -> TockResult<()> {
     let mut gpio = gpio_driver.gpios().next().unwrap();
     let gpio_in = gpio.enable_input(ResistorMode::PullDown)?;
     loop {
-        writeln!(console, "{:?}", gpio_in.read()?)?;
+        writeln!(console, "{:?}", gpio_in.read()?).await?;
         timer_driver.sleep(Duration::from_ms(500)).await?;
     }
 }

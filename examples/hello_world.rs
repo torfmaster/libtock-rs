@@ -2,7 +2,6 @@
 
 #![no_std]
 
-use core::fmt::Write;
 use libtock::result::TockResult;
 
 #[libtock::main]
@@ -11,7 +10,7 @@ async fn main() -> TockResult<()> {
 
     let mut console = drivers.console.create_console();
 
-    writeln!(console, "Hello Tock World")?;
+    writeln!(console, "Hello Tock World").await?;
 
     Ok(())
 }

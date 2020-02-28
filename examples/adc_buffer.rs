@@ -1,6 +1,6 @@
 #![no_std]
 
-use core::fmt::Write;
+use core::executor;
 use libtock::adc::AdcBuffer;
 use libtock::result::TockResult;
 use libtock::syscalls;
@@ -20,7 +20,13 @@ async fn main() -> TockResult<()> {
 
     let mut callback = |_, _| {
         adc_buffer.read_bytes(&mut temp_buffer[..]);
-        writeln!(console, "First sample in buffer: {}", temp_buffer[0]).unwrap();
+        unsafe {
+            executor::block_on(async {
+                writeln!(console, "First sample in buffer: {}", temp_buffer[0])
+                    .await
+                    .unwrap()
+            })
+        };
     };
 
     let _subscription = adc_driver.subscribe(&mut callback)?;

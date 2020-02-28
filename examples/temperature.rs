@@ -1,6 +1,5 @@
 #![no_std]
 
-use core::fmt::Write;
 use libtock::result::TockResult;
 use libtock::timer::Duration;
 
@@ -15,7 +14,7 @@ async fn main() -> TockResult<()> {
 
     loop {
         let temperature = temperature_driver.measure_temperature().await?;
-        writeln!(console, "Temperature: {}", temperature)?;
+        writeln!(console, "Temperature: {}", temperature).await?;
         timer_driver.sleep(Duration::from_ms(1000)).await?;
     }
 }

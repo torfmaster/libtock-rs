@@ -1,6 +1,5 @@
 #![no_std]
 
-use core::fmt::Write;
 use libtock::result::TockResult;
 use libtock::timer::Duration;
 
@@ -20,7 +19,8 @@ async fn main() -> TockResult<()> {
                 "button {}: {:?}",
                 button.button_num(),
                 button.read()?
-            )?;
+            )
+            .await?;
         }
         timer_driver.sleep(Duration::from_ms(500)).await?;
     }

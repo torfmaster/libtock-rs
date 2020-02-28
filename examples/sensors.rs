@@ -1,6 +1,5 @@
 #![no_std]
 
-use core::fmt::Write;
 use libtock::result::TockResult;
 use libtock::sensors::Sensor;
 use libtock::timer::Duration;
@@ -18,22 +17,26 @@ async fn main() -> TockResult<()> {
             console,
             "Humidity:    {}\n",
             drivers.humidity_sensor.read()?
-        )?;
+        )
+        .await?;
         writeln!(
             console,
             "Temperature: {}\n",
             drivers.temperature_sensor.read()?
-        )?;
+        )
+        .await?;
         writeln!(
             console,
             "Light:       {}\n",
             drivers.ambient_light_sensor.read()?
-        )?;
+        )
+        .await?;
         writeln!(
             console,
             "Accel:       {}\n",
             drivers.ninedof.read_acceleration()?
-        )?;
+        )
+        .await?;
         timer_driver.sleep(Duration::from_ms(500)).await?;
     }
 }

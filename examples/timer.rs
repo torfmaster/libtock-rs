@@ -1,9 +1,7 @@
+// Shows a repeated timer combined with reading and displaying the current time in clock ticks
+
 #![no_std]
-/**
- * This example shows a repeated timer combined with reading and displaying the current time in
- * clock ticks.
- **/
-use core::fmt::Write;
+
 use libtock::console::Console;
 use libtock::result::TockResult;
 use libtock::timer::DriverContext;
@@ -20,7 +18,7 @@ async fn main() -> TockResult<()> {
     let mut previous_ticks = None;
 
     for i in 0.. {
-        print_now(&mut console, &mut drivers.timer, &mut previous_ticks, i)?;
+        print_now(&mut console, &mut drivers.timer, &mut previous_ticks, i).await?;
         let mut timer_driver = drivers.timer.create_timer_driver();
         let timer_driver = timer_driver.activate()?;
 
@@ -30,7 +28,7 @@ async fn main() -> TockResult<()> {
     Ok(())
 }
 
-fn print_now(
+async fn print_now(
     console: &mut Console,
     timer_context: &mut DriverContext,
     previous_ticks: &mut Option<isize>,
@@ -50,7 +48,8 @@ fn print_now(
         ticks,
         previous_ticks.map(|previous| ticks - previous),
         frequency
-    )?;
+    )
+    .await?;
     *previous_ticks = Some(ticks);
     Ok(())
 }
